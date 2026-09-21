@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un detalle para ti 🌻</title>
+<style>
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+}
 
+#cubrir {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(#8fd3ff, #fff7c8, #9dd67d);
+    transition: opacity .8s;
+    z-index: 10;
+}
+
+#cubrir h1 {
+    font-size: 2.2rem;
+    margin: 0 20px;
+    color: #5b4a12;
+}
+
+#cubrir p {
+    max-width: 340px;
+    margin: 18px 20px;
+    color: #4c5a43;
+    line-height: 1.5;
+}
+
+#cubrir button {
+    padding: 14px 24px;
+    border: 0;
+    border-radius: 20px;
+    background: #ffd84d;
+    color: #5b4a12;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+#jardin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(#87CEEB 0%, #E0F6FF 58%, #90EE90 100%);
+    overflow: hidden;
+}
+
+.instruccion {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 9px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.75);
+    color: #5b4a12;
+    font-weight: bold;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.flor {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    animation: aparecer .45s ease-out;
+    z-index: 2;
+    max-width: 240px;
+}
+
+.florEmoji {
+    font-size: 3rem;
+    filter: drop-shadow(0 3px 2px rgba(0,0,0,.15));
+}
+
+.tarjeta {
+    background: rgba(255,255,255,.93);
+    border: 2px solid #f1c40f;
+    border-radius: 14px;
+    padding: 8px 10px;
+    margin-top: 3px;
+    color: #5b4a12;
+    font-size: .9rem;
+    line-height: 1.25;
+    box-shadow: 0 3px 10px rgba(0,0,0,.12);
+}
+
+.chispa {
+    position: absolute;
+    pointer-events: none;
+    font-size: 1.1rem;
+    animation: brillo .9s forwards;
+    z-index: 4;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(.3); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes brillo {
+    0% { opacity: 1; transform: translate(0,0) scale(.5); }
+    100% { opacity: 0; transform: translate(var(--x),var(--y)) scale(1.2); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="cubrir">
+    <h1>🌻 Tengo algo para ti 💛</h1>
+    <p>
+        Preparé este pequeño jardín para ti.
+        Cada vez que toques la pantalla aparecerá una flor
+        con un mensaje especial. ✨
+    </p>
+    <button onclick="iniciarJardin()">Entrar al jardín 🌼</button>
+</div>
+
+<div id="jardin">
+    <div class="instruccion">✨ Toca cualquier lugar ✨</div>
+</div>
+
+<script>
+const frases = [
+    // 1-20 · Motivación
+    "Confía en ti, tienes más fuerza de la que imaginas 💛",
+    "Que nunca te falten motivos para seguir adelante ✨",
+    "Puedes con esto y con mucho más, yo creo en ti 🌻",
+    "Paso a paso también se llega muy lejos 🌼",
+    "Recuerda todo lo que has superado hasta hoy 💪💛",
+    "No tienes que ser perfecta para ser increíble ✨",
+    "Si hoy cuesta un poquito, mañana puede ser diferente 🌤️",
+    "Que tus sueños siempre tengan un lugar en tu corazón 🌟",
+    "Nunca olvides lo valiosa que eres 💛",
+    "Estoy orgulloso de cada pequeño paso que das 🌻",
+    "Date permiso de descansar, pero nunca de rendirte 💫",
+    "Tu esfuerzo algún día se convertirá en aquello que soñaste 🌼",
+    "A veces avanzar despacio sigue siendo avanzar 💛",
+    "Que cada nuevo día te encuentre con un poquito más de esperanza ☀️",
+    "Recuerda que incluso los días difíciles terminan 🌙",
+    "Hay muchísimo por delante que todavía puedes conquistar ✨",
+    "No dudes de todo lo bonito que eres capaz de construir 🌻",
+    "Cuando no tengas fuerzas, recuerda que no estás sola 💛",
+    "Tu sonrisa merece aparecer incluso después de un día complicado 😊",
+    "Confía en el proceso, lo bonito también toma tiempo 🌱",
+
+    // 21-40 · Amor
+    "Me encanta tenerte en mi vida 💛",
+    "Contigo hasta un día normal se siente especial 🌻",
+    "Me haces sonreír de una manera que no sé explicar 😊",
+    "Qué bonito es poder compartir mi vida contigo ✨",
+    "Te elegiría una y otra vez, incluso en los días difíciles 💛",
+    "Hay algo en ti que siempre logra alegrarme el corazón 🌼",
+    "Me gusta quererte en los pequeños detalles de cada día 🌻",
+    "Tu forma de ser se ha convertido en una de mis cosas favoritas 💕",
+    "Gracias por hacer que mi mundo tenga un poquito más de color 🌈",
+    "Me encanta cuando simplemente estamos juntos y no hace falta nada más 💛",
+    "Si pudiera guardar momentos contigo, guardaría todos 🌻",
+    "Tu abrazo siempre se siente como llegar a un lugar seguro 🤍",
+    "Me haces sentir afortunado de compartir este camino contigo ✨",
+    "Hay días en los que simplemente pienso en ti y sonrío 💛",
+    "Te quiero por todo lo que eres y también por todo lo que inspiras en mí 🌼",
+    "Lo nuestro tiene un lugar muy especial en mi corazón 💕",
+    "Me encanta descubrir cada día una razón nueva para quererte 🌻",
+    "Contigo aprendí que el amor también está en las cosas pequeñas 💛",
+    "Qué suerte la mía poder decir que eres parte de mi vida ✨",
+    "Te quiero más de lo que muchas veces sé decir con palabras ❤️",
+
+    // 41-45 · Extrañarte
+    "Hoy te extraño un poquito más de lo normal 🥺💛",
+    "Ojalá pudiera darte un abrazo justo ahora 🌻",
+    "Hay momentos en los que solo quisiera tenerte cerquita 🤍",
+    "Extrañarte me recuerda lo mucho que disfruto tenerte a mi lado 💛",
+    "Aunque estés lejos por un momento, sigues muy cerquita de mi corazón ✨",
+
+    // 46-60 · Gratitud y 6 meses
+    "Gracias por estos 6 meses tan bonitos juntos 💛",
+    "Gracias por cada risa que hemos compartido 🌻",
+    "Gracias por estar incluso en los días que no han sido fáciles ✨",
+    "Gracias por cada abrazo, cada palabra y cada pequeño detalle 🤍",
+    "Gracias por dejarme formar parte de tu vida 💛",
+    "Gracias por todos esos momentos que ahora son recuerdos especiales 🌼",
+    "Gracias por hacer de estos meses algo que quiero recordar siempre 🌻",
+    "Gracias por escucharme incluso cuando no sé cómo explicar lo que siento 💕",
+    "Gracias por cada vez que me hiciste sonreír sin darte cuenta 😊",
+    "Gracias por la paciencia, el cariño y la compañía 💛",
+    "Gracias por ser tú, sin necesidad de cambiar nada 🌻",
+    "Gracias por cada conversación que terminó haciéndome sentir mejor ✨",
+    "Gracias por compartir conmigo una parte tan bonita de tu historia 🤍",
+    "Estos 6 meses han dejado muchísimos momentos que guardo con cariño 💛",
+    "Gracias por todo lo que hemos construido juntos durante estos meses 🌱",
+
+    // 61-75 · Futuro juntos
+    "Espero que todavía nos queden muchísimas historias por vivir 🌻",
+    "Quiero seguir coleccionando momentos contigo 💛",
+    "Que estos 6 meses sean solo el comienzo de muchos más ✨",
+    "Me emociona pensar en todo lo que todavía nos falta descubrir juntos 🌎",
+    "Ojalá podamos mirar atrás algún día y sonreír por todo lo que vivimos 💕",
+    "Quiero seguir acompañándote en tus días buenos y en los complicados 🤍",
+    "Hay muchos lugares que todavía quiero conocer contigo 🌻",
+    "Quiero que sigamos creciendo juntos, cada uno a su manera 💛",
+    "Que nunca nos falten planes improvisados y momentos inesperados ✨",
+    "Todavía tenemos muchísimas sonrisas pendientes 😊",
+    "Me gustaría llenar el futuro de recuerdos contigo 🌼",
+    "Quiero seguir celebrando tus logros como si fueran míos 💛",
+    "Que el tiempo nos regale muchas más historias para contar 🌻",
+    "Me gusta imaginar todo lo bonito que todavía podemos vivir juntos ✨",
+    "Por muchos meses más de risas, abrazos y aventuras 💕",
+
+    // 76-85 · Tiernas y casuales
+    "Solo pasaba por aquí para recordarte que te quiero 💛",
+    "Espero que estés sonriendo mientras lees esto 😊",
+    "Esta flor llegó con un abrazo escondido 🌻",
+    "Un pequeño detalle para hacerte sonreír un ratito ✨",
+    "Hoy también eres una de mis razones para sonreír 💛",
+    "Si esta flor pudiera hablar, te diría que eres especial 🌼",
+    "Te mando un poquito de cariño en forma de flor 🌻",
+    "Guarda esta flor para uno de esos días en los que necesites una sonrisa 💕",
+    "Una flor amarilla porque un mensaje normal no era suficiente 💛",
+    "Espero que este pequeño detalle te alegre aunque sea un poquito ✨",
+
+    // 86-95 · Recuerdos
+    "Me encanta recordar todas las veces que terminamos riéndonos por cualquier tontería 😂💛",
+    "Hay momentos contigo que podría recordar una y otra vez 🌻",
+    "Algunos de mis recuerdos favoritos tienen tu sonrisa en ellos ✨",
+    "Qué bonito pensar en todo lo que hemos vivido en estos meses 💛",
+    "Cada salida, cada conversación y cada risa tiene un lugar especial 🌼",
+    "Me gusta recordar cómo empezó todo y ver hasta dónde hemos llegado 🌻",
+    "Hay momentos pequeños que terminaron convirtiéndose en recuerdos enormes 💕",
+    "Algún día miraremos atrás y nos reiremos de muchas de nuestras historias 😊",
+    "Los mejores recuerdos todavía tienen espacio para muchos capítulos más 📖💛",
+    "Si pudiera repetir algunos días contigo, probablemente elegiría más de uno 🌻",
+
+    // 96-100 · Especiales
+    "No sé qué tendrá el amarillo, pero hoy me pareció perfecto para ti 🌻",
+    "Si llegaste hasta aquí, esta flor es especialmente para ti 💛",
+    "Que esta pequeña flor te recuerde que alguien piensa en ti ✨",
+    "Entre tantas flores, esta encontró su camino hasta ti 🌼",
+    "Y si alguna vez dudas de lo especial que eres, vuelve a mirar este jardín 💛"
+];
+
+const flores = ["🌻", "🌼", "🌷", "🌾"];
+let indiceFrase = 0;
+
+function iniciarJardin() {
+    const cubrir = document.getElementById("cubrir");
+    cubrir.style.opacity = "0";
+
+    setTimeout(() => {
+        cubrir.style.display = "none";
+        document.getElementById("jardin").style.display = "block";
+    }, 700);
+}
+
+function crearChispas(x, y) {
+    for (let i = 0; i < 6; i++) {
+        const chispa = document.createElement("div");
+        chispa.className = "chispa";
+        chispa.textContent = "✨";
+        chispa.style.left = x + "px";
+        chispa.style.top = y + "px";
+        chispa.style.setProperty("--x", (Math.random() * 100 - 50) + "px");
+        chispa.style.setProperty("--y", (Math.random() * 100 - 50) + "px");
+        document.getElementById("jardin").appendChild(chispa);
+
+        setTimeout(() => chispa.remove(), 900);
+    }
+}
+
+document.getElementById("jardin").addEventListener("click", function(e) {
+    if (e.target.closest(".instruccion")) return;
+
+    const flor = document.createElement("div");
+    flor.className = "flor";
+
+    flor.style.left = e.clientX + "px";
+    flor.style.top = e.clientY + "px";
+
+    const emoji = flores[Math.floor(Math.random() * flores.length)];
+
+    flor.innerHTML = `
+        <div class="florEmoji">${emoji}</div>
+        <div class="tarjeta">${frases[indiceFrase]}</div>
+    `;
+
+    document.getElementById("jardin").appendChild(flor);
+
+    crearChispas(e.clientX, e.clientY);
+
+    indiceFrase = (indiceFrase + 1) % frases.length;
+});
+</script>
+
+</body>
+</html>
